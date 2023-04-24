@@ -1,9 +1,9 @@
 use extendr_api::prelude::*;
-use rand::Rng;
 use std::vec;
 use rand::seq::SliceRandom;
+use rand::Rng;
 
-/// Use value iteration to solve a 5x5 gridworld
+/// Does value iteration
 /// @export
 #[extendr]
 fn value_iteration (reward: Vec<f64>, obstacles: Vec<i32>, wind: f64, beta: f64) -> Vec<f64> {
@@ -67,6 +67,12 @@ fn moving (pos: usize, action: i32, obstacles: &Vec<i32>) -> usize {
 }
 
 fn hits_boundary (pos: usize, action: i32) -> bool {
+    // grid positions go from 0 to 24:
+    // 0  1  2  3  4
+    // 5  6  7  8  9
+    // 10 11 12 13 14
+    // 15 16 17 18 19
+    // 20 21 22 23 24
     match action {
         1 => pos < 5,
         2 => pos > 19,
@@ -122,7 +128,7 @@ fn update_future_value<'a, 'b> (
     future_value
 }
 
-/// Use value iteration to solve a 5x5 gridworld
+/// Generates 50 trajectories
 /// @export
 #[extendr]
 fn generate_trajs(policy: Vec<i32>, obstacles: Vec<i32>, wind: f64) -> Vec<i32> {
@@ -133,13 +139,13 @@ fn generate_trajs(policy: Vec<i32>, obstacles: Vec<i32>, wind: f64) -> Vec<i32> 
 
     for trajectory in trajectories.iter_mut() {
         let mut pos = loop {
-            let random_pos = rng.gen_range(1..=25);
+            let random_pos = rng.gen_range(0..25);
             if !obstacles.contains(&(random_pos as i32)) {
                 break random_pos as i32;
             }
         };
         for t in 0..trajectory_length {
-            let action = policy[(pos - 1) as usize];
+            let action = policy[(pos) as usize];
             let intended_move = match action {
                 1 => vec![1],
                 2 => vec![2],

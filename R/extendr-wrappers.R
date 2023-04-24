@@ -8,11 +8,11 @@
 #' @useDynLib gridworld, .registration = TRUE
 NULL
 
-#' Use value iteration to solve a 5x5 gridworld
+#' Does value iteration
 #' @export
 value_iteration <- function(reward, obstacles, wind, beta) .Call(wrap__value_iteration, reward, obstacles, wind, beta)
 
-#' Use value iteration to solve a 5x5 gridworld
+#' Generates 50 trajectories
 #' @export
 generate_trajs <- function(policy, obstacles, wind) .Call(wrap__generate_trajs, policy, obstacles, wind)
 

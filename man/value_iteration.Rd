@@ -2,10 +2,10 @@
 % Please edit documentation in R/extendr-wrappers.R
 \name{value_iteration}
 \alias{value_iteration}
-\title{Use value iteration to solve a 5x5 gridworld}
+\title{Does value iteration}
 \usage{
 value_iteration(reward, obstacles, wind, beta)
 }
 \description{
-Use value iteration to solve a 5x5 gridworld
+Does value iteration
 }

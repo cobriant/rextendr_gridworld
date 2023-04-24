@@ -2,10 +2,10 @@
 % Please edit documentation in R/extendr-wrappers.R
 \name{generate_trajs}
 \alias{generate_trajs}
-\title{Use value iteration to solve a 5x5 gridworld}
+\title{Generates 50 trajectories}
 \usage{
 generate_trajs(policy, obstacles, wind)
 }
 \description{
-Use value iteration to solve a 5x5 gridworld
+Generates 50 trajectories
 }
