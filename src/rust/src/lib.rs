@@ -140,11 +140,12 @@ fn generate_trajs(policy: Vec<i32>, obstacles: Vec<i32>, wind: f64) -> Vec<i32> 
     for trajectory in trajectories.iter_mut() {
         let mut pos = loop {
             let random_pos = rng.gen_range(0..25);
-            if !obstacles.contains(&(random_pos as i32)) {
+            if random_pos != 25 && !obstacles.contains(&(random_pos as i32)) {
                 break random_pos as i32;
             }
         };
-        for t in 0..trajectory_length {
+        trajectory[0] = pos;
+        for t in 1..trajectory_length {
             let action = policy[(pos) as usize];
             let intended_move = match action {
                 1 => vec![1],
@@ -184,6 +185,7 @@ fn generate_trajs(policy: Vec<i32>, obstacles: Vec<i32>, wind: f64) -> Vec<i32> 
 
     trajectories.into_iter().flatten().collect()
 }
+
 
 // Macro to generate exports.
 // This ensures exported functions are registered with R.
