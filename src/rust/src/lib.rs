@@ -131,16 +131,17 @@ fn update_future_value<'a, 'b> (
 /// Generates 50 trajectories
 /// @export
 #[extendr]
-fn generate_trajs(policy: Vec<i32>, obstacles: Vec<i32>, wind: f64) -> Vec<i32> {
-    let num_trajectories = 50;
+fn generate_trajs(policy: Vec<i32>, obstacles: Vec<i32>, wind: f64, n_trajectories: i32) -> Vec<i32> {
     let trajectory_length = 10;
+    // creates a random number generator rng
     let mut rng = rand::thread_rng();
-    let mut trajectories: Vec<Vec<i32>> = vec![vec![0; trajectory_length]; num_trajectories];
+    // initialize trajectories to store the trajectories
+    let mut trajectories: Vec<Vec<i32>> = vec![vec![0; trajectory_length]; n_trajectories as usize];
 
     for trajectory in trajectories.iter_mut() {
-        let mut pos = loop {
+        let mut pos = loop { // find a non-obstacle starting point
             let random_pos = rng.gen_range(0..25);
-            if random_pos != 25 && !obstacles.contains(&(random_pos as i32)) {
+            if !obstacles.contains(&(random_pos as i32)) {
                 break random_pos as i32;
             }
         };
@@ -170,9 +171,8 @@ fn generate_trajs(policy: Vec<i32>, obstacles: Vec<i32>, wind: f64) -> Vec<i32> 
             let actual_move = if move_prob < wind {
                 *intended_move.choose(&mut rng).unwrap()
             } else {
-                let mut available_moves = vec![1, 2, 3, 4];
-                available_moves.retain(|m| !intended_move.contains(m));
-                *available_moves.choose(&mut rng).unwrap()
+                let all_moves = vec![1, 2, 3, 4];
+                *all_moves.choose(&mut rng).unwrap()
             };
 
             let next_pos = moving(pos as usize, actual_move, &obstacles);

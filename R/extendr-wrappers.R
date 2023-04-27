@@ -14,5 +14,5 @@ value_iteration <- function(reward, obstacles, wind, beta) .Call(wrap__value_ite
 
 #' Generates 50 trajectories
 #' @export
-generate_trajs <- function(policy, obstacles, wind) .Call(wrap__generate_trajs, policy, obstacles, wind)
+generate_trajs <- function(policy, obstacles, wind, n_trajectories) .Call(wrap__generate_trajs, policy, obstacles, wind, n_trajectories)
 

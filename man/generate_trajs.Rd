@@ -4,7 +4,7 @@
 \alias{generate_trajs}
 \title{Generates 50 trajectories}
 \usage{
-generate_trajs(policy, obstacles, wind)
+generate_trajs(policy, obstacles, wind, n_trajectories)
 }
 \description{
 Generates 50 trajectories
