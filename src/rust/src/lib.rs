@@ -176,9 +176,7 @@ fn generate_trajs(policy: Vec<i32>, obstacles: Vec<i32>, wind: f64, n_trajectori
             };
 
             let next_pos = moving(pos as usize, actual_move, &obstacles);
-            if next_pos != 0 {
                 pos = next_pos as i32;
-            }
             trajectory[t] = pos;
         }
     }
