@@ -12,7 +12,6 @@ NULL
 #' @export
 value_iteration <- function(reward, obstacles, wind, beta) .Call(wrap__value_iteration, reward, obstacles, wind, beta)
 
-#' Generates 50 trajectories
-#' @export
+#' Generates trajectories
 generate_trajs <- function(policy, obstacles, wind, n_trajectories) .Call(wrap__generate_trajs, policy, obstacles, wind, n_trajectories)
 

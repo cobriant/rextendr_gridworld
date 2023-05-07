@@ -7,10 +7,10 @@ use rand::Rng;
 /// @export
 #[extendr]
 fn value_iteration (reward: Vec<f64>, obstacles: Vec<i32>, wind: f64, beta: f64) -> Vec<f64> {
-    let mut future_value: Vec<Vec<f64>> = vec![vec![0.0; 4]; 25];
+    let mut future_value: Vec<Vec<f64>> = vec![vec![0.0; 5]; 25];
     let mut value: Vec<f64> = vec![0.0; 25];
     let mut value_next: Vec<f64> = vec![1.0; 25];
-    let mut value_action = vec![vec![0.0; 4]; 25];
+    let mut value_action = vec![vec![0.0; 5]; 25];
 
     while check_convergence(value, value_next.clone()) {
         value = value_next.clone();
@@ -18,8 +18,8 @@ fn value_iteration (reward: Vec<f64>, obstacles: Vec<i32>, wind: f64, beta: f64)
         let future_value_next = update_future_value(&mut future_value, &value, &obstacles, wind);
 
         for i in 0..25 {
-            for j in 0..4 {
-                // value_action[25x4] = reward[25x1] + beta * future_value[25x4]
+            for j in 0..5 {
+                // value_action[25x5] = reward[25x1] + beta * future_value[25x5]
                 value_action[i][j] = reward[i] + beta * future_value_next[i][j];
             }
         }
@@ -61,6 +61,7 @@ fn moving (pos: usize, action: i32, obstacles: &Vec<i32>) -> usize {
             2 => pos + 5,
             3 => pos - 1,
             4 => pos + 1,
+            5 => pos,
             _ => 0,
         }
     }
@@ -105,20 +106,21 @@ fn update_future_value<'a, 'b> (
 ) -> &'a mut Vec<Vec<f64>> {
     for i in 0..future_value.len() {
         for j in 0..future_value[i].len() {
-            let mut weights: [f64; 4] = [(1.0 - wind) / 3.0; 4];
+            let mut weights: [f64; 5] = [(1.0 - wind) / 4.0; 5];
             weights[j] = wind;
             let move_vec = vec![
                 moving(i, 1, &obstacles),
                 moving(i, 2, &obstacles),
                 moving(i, 3, &obstacles),
-                moving(i, 4, &obstacles)
+                moving(i, 4, &obstacles),
+                moving(i, 5, &obstacles),
             ];
 
-            let mut value_move_vec: Vec<f64> = vec![0.0; 4];
-            for k in 0..4 {
+            let mut value_move_vec: Vec<f64> = vec![0.0; 5];
+            for k in 0..5 {
                 value_move_vec[k] = value[move_vec[k] as usize];
             }
-            for l in 0..4 {
+            for l in 0..5 {
                 value_move_vec[l] = value_move_vec[l] * weights[l];
             }
             let value_sum: f64 = value_move_vec.iter().sum();
@@ -128,8 +130,7 @@ fn update_future_value<'a, 'b> (
     future_value
 }
 
-/// Generates 50 trajectories
-/// @export
+/// Generates trajectories
 #[extendr]
 fn generate_trajs(policy: Vec<i32>, obstacles: Vec<i32>, wind: f64, n_trajectories: i32) -> Vec<i32> {
     let trajectory_length = 10;
@@ -153,16 +154,32 @@ fn generate_trajs(policy: Vec<i32>, obstacles: Vec<i32>, wind: f64, n_trajectori
                 2 => vec![2],
                 3 => vec![3],
                 4 => vec![4],
+                5 => vec![5],
                 12 => vec![1, 2],
                 13 => vec![1, 3],
                 14 => vec![1, 4],
+                15 => vec![1, 5],
                 23 => vec![2, 3],
                 24 => vec![2, 4],
+                25 => vec![2, 5],
                 34 => vec![3, 4],
+                35 => vec![3, 5],
+                45 => vec![4, 5],
                 6 => vec![1, 2, 3],
                 7 => vec![1, 2, 4],
                 8 => vec![1, 3, 4],
                 9 => vec![2, 3, 4],
+                125 => vec![1, 2, 5],
+                135 => vec![1, 3, 5],
+                145 => vec![1, 4, 5],
+                235 => vec![2, 3, 5],
+                245 => vec![2, 4, 5],
+                345 => vec![3, 4, 5],
+                46 => vec![1, 2, 3, 5],
+                47 => vec![1, 2, 4, 5],
+                48 => vec![1, 3, 4, 5],
+                49 => vec![2, 3, 4, 5],
+                50 => vec![1, 2, 3, 4, 5],
                 10 => vec![1, 2, 3, 4],
                 _ => vec![],
             };
@@ -171,7 +188,7 @@ fn generate_trajs(policy: Vec<i32>, obstacles: Vec<i32>, wind: f64, n_trajectori
             let actual_move = if move_prob < wind {
                 *intended_move.choose(&mut rng).unwrap()
             } else {
-                let all_moves = vec![1, 2, 3, 4];
+                let all_moves = vec![1, 2, 3, 4, 5];
                 *all_moves.choose(&mut rng).unwrap()
             };
 

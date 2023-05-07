@@ -2,10 +2,10 @@
 % Please edit documentation in R/extendr-wrappers.R
 \name{generate_trajs}
 \alias{generate_trajs}
-\title{Generates 50 trajectories}
+\title{Generates trajectories}
 \usage{
 generate_trajs(policy, obstacles, wind, n_trajectories)
 }
 \description{
-Generates 50 trajectories
+Generates trajectories
 }
