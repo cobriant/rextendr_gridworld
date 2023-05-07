@@ -131,6 +131,7 @@ fn update_future_value<'a, 'b> (
 }
 
 /// Generates trajectories
+/// @export
 #[extendr]
 fn generate_trajs(policy: Vec<i32>, obstacles: Vec<i32>, wind: f64, n_trajectories: i32) -> Vec<i32> {
     let trajectory_length = 10;
